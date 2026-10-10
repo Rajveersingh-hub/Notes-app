@@ -17,12 +17,20 @@ const initialState = {
   paste: loadPastes(),
 };
 
+const hasContent = (paste) =>
+  typeof paste?.Content === 'string' && paste.Content.trim().length > 0;
+
 export const pasteSlice = createSlice({
   name: 'paste',
   initialState,
   reducers: {
     addtopaste:(state,action) => {
       const newPaste = action.payload;
+      if (!hasContent(newPaste)) {
+        toast.error('Paste content cannot be empty!', { position: 'top-right' });
+        return;
+      }
+
       state.paste = [...state.paste, newPaste];
 
       try {
@@ -35,6 +43,11 @@ export const pasteSlice = createSlice({
     },
     Updatetopaste:(state,action) => {
       const updatedPaste = action.payload;
+      if (!hasContent(updatedPaste)) {
+        toast.error('Paste content cannot be empty!', { position: 'top-right' });
+        return;
+      }
+
       const index = state.paste.findIndex(paste => paste._ID === updatedPaste._ID);
       if (index !== -1) {
         state.paste[index] = updatedPaste;

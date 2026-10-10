@@ -1,8 +1,9 @@
 import React from 'react'
-import { useState,useEffect } from 'react'
+import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { addtopaste, Updatetopaste } from '../features/counterslice/counterslice.jsx'
+import { toast } from 'react-hot-toast'
 
 const Home = () => {
   const [title, setTitle] = useState("");
@@ -22,6 +23,11 @@ const Home = () => {
   }, [pasteID, searchParams]);
 
   function createpaste() {
+    if (!value.trim()) {
+      toast.error('Paste content cannot be empty!', { position: 'top-right' });
+      return;
+    }
+
     const paste = {
       title,
       Content: value,
